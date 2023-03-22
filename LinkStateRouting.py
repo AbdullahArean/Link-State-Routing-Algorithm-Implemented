@@ -30,26 +30,19 @@ class NodeRouter:
         self.preve_sent_msg_seq = defaultdict(int)
         self.global_time_st = defaultdict(float)
         self.global_routers = defaultdict(list)
-
     def neighbour_add(self, neighbour):
         self.neigh.append(neighbour)
         self.global_routers[self.name].append(neighbour)
-
     def mesg_set(self, msg):
         self.msg = msg
-
     def add_prev_seq(self, msg):
         self.preve_sent_msg_seq[msg.name] = msg.seq_num
-
     def chk_prev_seq(self, msg):
         return self.preve_sent_msg_seq[msg.name] != msg.seq_num
-
     def add_timestamp(self, msg):
         self.global_time_st[msg.name] = msg.timestamp
-
     def chk_timestamp(self, msg):
         return self.global_time_st[msg.name] != msg.timestamp
-
     def update_global_routers(self, msg):
         if len(self.global_routers[msg.name]) > 0:
             for neighbour in msg.neigh:
@@ -64,7 +57,6 @@ class NodeRouter:
         else:
             for neighbour in msg.neigh:
                 self.global_routers[msg.name].append(neighbour)
-
     def check_neighbour_alive(self, msg):
         for neighbour in msg.neigh:
             if neighbour.name == self.name:
@@ -77,7 +69,6 @@ class NodeRouter:
                     self.neigh.append(to_be_added)
                     self.global_routers[self.name].append(to_be_added)
 
-
 class LinkStatePacket:
     def __init__(self, sender: NodeRouter):
         self.port = sender.port
@@ -85,7 +76,7 @@ class LinkStatePacket:
         self.neigh = sender.neigh
         self.seq_num = 0
         self.timestamp = dt.datetime.now().timestamp()
-        self.last_send = sender.name
+        self.last_sent_message = sender.name
 
     def increment_sequence_number(self):
         self.seq_num += 1
@@ -96,15 +87,11 @@ class Neighbours:
         self.name = name
         self.port = port
         self.distance = distance
-
-
 class Edge:
     def __init__(self, u, v, weight):
         self.start = u
         self.end = v
         self.weight = weight
-
-
 class Graph:
     def __init__(self, global_routers):
         self.global_routers = global_routers
@@ -116,8 +103,6 @@ class Graph:
             parent = router
             for child in neigh:
                 self.graph[parent].append(Edge(parent, child.name, child.distance))
-
-
 def calculate_paths_activator():
     while True:
         for key, value in parent_router.global_routers.items():
@@ -135,8 +120,6 @@ def calculate_paths_activator():
         # change the cost of the neighbour's link
         new_cost = random.randint(1, 10)
         parent_router.global_routers[router_name][neighbour_index].distance = new_cost
-
-
 def dijkstra_calculate_path():
     # Copying the parent router object
     _parent_router = parent_router
@@ -167,13 +150,13 @@ def dijkstra_calculate_path():
     counter = 0
 
     # Print the current router's name
-    print(f'I am NodeRouter {_parent_router.name}')
+    print(f'NodeRouter id:  {_parent_router.name}')
 
     # Set the current router to the parent router
     current_router = _parent_router.name
 
     # Initialize variables for storing the routers visited and the corresponding hops taken
-    printing_routers = _parent_router.name
+    print_routers = _parent_router.name
     printing_list = []
 
     # While all routers haven't been visited
@@ -208,7 +191,7 @@ def dijkstra_calculate_path():
             # Append the router to the list of visited routers
             printing_list.append(min_node)
             # Append the router to the string of routers visited so far
-            printing_routers = printing_routers + min_node
+            print_routers = print_routers + min_node
 
     # Print the hops and the corresponding cost for each visited router
     for node in printing_list:
@@ -250,11 +233,11 @@ def udp_server(_parent_router: NodeRouter):
         msg, client_address = server_socket.recvfrom(2048)
         received_message: LinkStatePacket = pickle.loads(msg, fix_imports=True, encoding="utf-8", errors="strict")
 
-        last_send = copy.deepcopy(received_message.last_send)
+        last_sent_message = copy.deepcopy(received_message.last_sent_message)
         for neighbour in _parent_router.neigh:
             # dont send to the previous sender
-            if last_send != neighbour.name and check_previous_sent_timestamp(received_message, _parent_router):
-                received_message.last_send = copy.deepcopy(_parent_router.name)
+            if last_sent_message != neighbour.name and check_previous_sent_timestamp(received_message, _parent_router):
+                received_message.last_sent_message = copy.deepcopy(_parent_router.name)
                 client_socket.sendto(pickle.dumps(received_message), (server_name, int(neighbour.port)))
         _parent_router.add_prev_seq(received_message)
         _parent_router.add_timestamp(received_message)
@@ -262,45 +245,47 @@ def udp_server(_parent_router: NodeRouter):
         _parent_router.update_global_routers(received_message)
 
 
-def check_if_neighbours_alive(_parent_router: NodeRouter):
-    neighbours_to_remove = None
+def check_neigh_alive(_parent_router: NodeRouter):
+    not_alive_neigh_remove = None
     for neighbour in _parent_router.neigh:
         if dt.datetime.now().timestamp() - _parent_router.global_time_st[neighbour.name] > 3:
             # remove from LSA
-            neighbours_to_remove = neighbour.name
+            not_alive_neigh_remove = neighbour.name
 
             # remove from global key
             # remove from global values
-    if neighbours_to_remove is not None:
-        _parent_router.global_routers.pop(neighbours_to_remove, None)
+    if not_alive_neigh_remove is not None:
+        _parent_router.global_routers.pop(not_alive_neigh_remove, None)
         for neighbour in _parent_router.neigh:
-            if neighbours_to_remove == neighbour.name:
+            if not_alive_neigh_remove == neighbour.name:
                 _parent_router.neigh.remove(neighbour)
                 break
 
 
-def not_my_neighbour(router, _parent_router):
+def not_neigh(router, _parent_router):
     for neighbour in _parent_router.neigh:
         if router == neighbour.name:
             return False
     return True
 
 
-def check_if_non_neighbours_alive(_parent_router: NodeRouter):
-    router_to_remove = None
+def check_if_non_neigh_alive(_parent_router: NodeRouter):
+    
+    not_alive_router_to_remove = None
     for router, all_neighbours in _parent_router.global_routers.items():
-        if not_my_neighbour(router, _parent_router) and router != _parent_router.name:
+        if not_neigh(router, _parent_router) and router != _parent_router.name:
             if dt.datetime.now().timestamp() - _parent_router.global_time_st[router] > 12:
-                router_to_remove = router
-    if router_to_remove is not None:
-        _parent_router.global_routers.pop(router_to_remove, None)
+                
+                not_alive_router_to_remove = router
+    if not_alive_router_to_remove is not None:
+        _parent_router.global_routers.pop(not_alive_router_to_remove, None)
 
 
 def check_alive(_parent_router: NodeRouter):
     while True:
         time.sleep(3)
-        check_if_neighbours_alive(_parent_router)
-        check_if_non_neighbours_alive(_parent_router)
+        check_neigh_alive(_parent_router)
+        check_if_non_neigh_alive(_parent_router)
 
 
 if len(sys.argv) == arg_num:
@@ -327,11 +312,11 @@ if len(sys.argv) == arg_num:
         line_counter += 1
 
     parent_router.mesg_set(LinkStatePacket(parent_router))
-    client_thread = threading.Thread(target=udp_client, args=(parent_router,))
-    server_thread = threading.Thread(target=udp_server, args=(parent_router,))
-    calculation_thread = threading.Thread(target=calculate_paths_activator)
-    check_alive_thread = threading.Thread(target=check_alive, args=(parent_router,))
-    client_thread.start()
-    server_thread.start()
-    calculation_thread.start()
-    check_alive_thread.start()
+    client_thread_toreceive = threading.Thread(target=udp_client, args=(parent_router,))
+    server_thread_tosend = threading.Thread(target=udp_server, args=(parent_router,))
+    distance_calculation_thread = threading.Thread(target=calculate_paths_activator)
+    check_alive = threading.Thread(target=check_alive, args=(parent_router,))
+    client_thread_toreceive.start()
+    server_thread_tosend.start()
+    distance_calculation_thread.start()
+    check_alive.start()
