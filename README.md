@@ -62,7 +62,15 @@ The script first imports the necessary libraries such as sys, socket, time, thre
 - Graph class: This class represents the network topology as a graph. It has attributes like global_routers (dictionary of router nodes and their neighbours) and graph (dictionary of edges between the routers). The class has a method parse (to create the graph from the global routers information).
 
 - calculate_paths_activator function: This function is used to periodically trigger the dijkstra_calculate_path function to calculate the least cost path to all nodes in the network. It also randomly changes the cost of one of the links in the network.
-
+```
+# select a this router name from the global_routers dictionary
+        router_name = parent_router.name
+        # select a random neighbour of the router
+        neighbour_index = random.randint(0, len(parent_router.global_routers[router_name])-1)
+        # change the cost of the neighbour's link
+        new_cost = random.randint(1, 10)
+        parent_router.global_routers[router_name][neighbour_index].distance = new_cost
+```
 - dijkstra_calculate_path function: This function calculates the least cost path to all nodes in the network using Dijkstra's algorithm. It uses a calculation_table dictionary to keep track of the least cost and visited status of each router node. It creates a new graph object from the parent router's global routers information and initializes the calculation table with initial values. It then iteratively selects the node with the least cost and updates its neighbours' least cost in the calculation table. Finally, it returns the least cost path to all nodes in the network.
 
 ```
