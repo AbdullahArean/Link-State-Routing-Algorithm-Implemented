@@ -5,9 +5,10 @@ Welcome to the Link State Routing Protocol implementation project using Python. 
 
 - [Features](#features)
 - [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+- [Implementation](#implementation)
+- [Results](#results)
+- [Conclustion](#conclusion)
+
 
 ## Features
 - Implements Link State Routing Protocol, which means every router has complete knowledge of the network topology.
@@ -21,7 +22,7 @@ Welcome to the Link State Routing Protocol implementation project using Python. 
 - Maintains a global routers dictionary to keep track of all routers in the network and their neighbours.
 - Prints out the current state of the network topology periodically.
 
-## Installation & Usage
+## Installation
 In recent versions of Mac OS X, Python is pre-installed. However, for older versions, the latest version of Python can be downloaded from the official Python website. Similarly, in Linux, Python is usually pre-installed, but if it is not, the distribution's package manager can be used to install Python. For example, on Ubuntu and Debian, the command "sudo apt-get install python3" can be used. In case of Windows, the latest version of Python can be downloaded from the official Python website and installed on the system.
 
 ### Router Creation
@@ -46,7 +47,7 @@ for windows machine we need to run the following command,
 ```
 python3 testwindows.py
 ```
-## Code Implementation Details
+## Implementation
 **LinkStateRouting.py** script that contains the implementation of a router simulation. It uses socket programming, threading, and **Dijkstra's algorithm** to simulate a routing network.
 
 The script first imports the necessary libraries such as **sys, socket, time, threading, pickle, defaultdict, inf, datetime, Dict, List, Any, Union, copy, and random**. It then defines some global variables such as **arg_num, file_name, name_router, parent_port, port_child, distance, update_interval, router_update_interval, and server_name**.
@@ -174,10 +175,10 @@ def dijkstra_calculate_path():
 - **check_alive function**: This function runs in a separate thread and periodically calls the check_neigh_alive and check_if_non_neigh_alive functions to check the liveness of its neighbors and non-neighbors respectively.
 
 The main body of the code reads the input file and creates the NodeRouter object representing the parent router and Neighbours objects representing its neighbors. It then creates threads for the udp_client, udp_server, distance_calculation_activator and check_alive functions and starts them.
-## Contributing
+## Results
 
-[Explain how others can contribute to the project. Include any guidelines for submitting bug reports or pull requests.]
+![All Router Live](Screenshots\allrouterslive.png)
+![One Router Live](Screenshots\onerouterlive.png)
 
-## License
+## Conclusion
 
-[Include information about the project's license. If you're not sure what license to use, check out [choosealicense.com](https://choosealicense.com/).]
