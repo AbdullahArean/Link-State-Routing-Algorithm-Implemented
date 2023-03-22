@@ -58,7 +58,7 @@ The script first imports the necessary libraries such as **sys, socket, time, th
 
 - **Neighbours class**: This class represents a neighbour node of a router. It has attributes like **name, port, and distance** (cost of the link between the two nodes).
 
-- Edge class: This class represents an edge (link) between two nodes in the network. It has attributes like **start, end, and weight** (cost of the link).
+- **Edge class**: This class represents an edge (link) between two nodes in the network. It has attributes like **start, end, and weight** (cost of the link).
 
 - **Graph class**: This class represents the network topology as a graph. It has attributes like **global_routers** (dictionary of router nodes and their neighbours) and **graph** (dictionary of edges between the routers). The class has a method parse (to create the graph from the global routers information).
 
@@ -177,8 +177,8 @@ def dijkstra_calculate_path():
 The main body of the code reads the input file and creates the NodeRouter object representing the parent router and Neighbours objects representing its neighbors. It then creates threads for the udp_client, udp_server, distance_calculation_activator and check_alive functions and starts them.
 ## Results
 
-![All Router Live](Screenshots\allrouterslive.png)
-![One Router Live](Screenshots\onerouterlive.png)
+![All Router Live](https://github.com/AbdullahArean/Link-State-Routing-Algorithm-Implemented/blob/main/Screenshots/allrouterslive.png)
+![One Router Live](https://github.com/AbdullahArean/Link-State-Routing-Algorithm-Implemented/blob/main/Screenshots/onerouterlive.png)
 
 ## Conclusion
 
