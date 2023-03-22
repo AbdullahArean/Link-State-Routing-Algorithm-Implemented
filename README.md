@@ -47,21 +47,21 @@ for windows machine we need to run the following command,
 python3 testwindows.py
 ```
 ## Code Implementation Details
-LinkStateRouting.py script that contains the implementation of a router simulation. It uses socket programming, threading, and Dijkstra's algorithm to simulate a routing network.
+**LinkStateRouting.py** script that contains the implementation of a router simulation. It uses socket programming, threading, and **Dijkstra's algorithm** to simulate a routing network.
 
-The script first imports the necessary libraries such as sys, socket, time, threading, pickle, defaultdict, inf, datetime, Dict, List, Any, Union, copy, and random. It then defines some global variables such as arg_num, file_name, name_router, parent_port, port_child, distance, update_interval, router_update_interval, and server_name.
+The script first imports the necessary libraries such as **sys, socket, time, threading, pickle, defaultdict, inf, datetime, Dict, List, Any, Union, copy, and random**. It then defines some global variables such as **arg_num, file_name, name_router, parent_port, port_child, distance, update_interval, router_update_interval, and server_name**.
 
-- NodeRouter class: This class represents a router node in the network. It has attributes like name, port, neigh (list of neighbour nodes), msg (last received message), preve_sent_msg_seq (dictionary storing the previous sequence number of sent messages), global_time_st (dictionary storing the global time stamp of received messages), and global_routers (dictionary storing the global routers information). The class has methods like neighbour_add (to add a new neighbour node to the router), mesg_set (to set the last received message), add_prev_seq (to add the previous sequence number of sent messages to the dictionary), chk_prev_seq (to check if the received message's sequence number is not the same as the previous one), add_timestamp (to add the global time stamp of the received message to the dictionary), chk_timestamp (to check if the received message's time stamp is not the same as the global time stamp), update_global_routers (to update the global routers information with the received message's neighbour information), and check_neighbour_alive (to check if the received message's neighbour is still alive and add it to the current router's neighbour list if it is).
+- **NodeRouter class**: This class represents a router node in the network. It has attributes like **name**, **port**, **neigh** (list of neighbour nodes), **msg** (last received message), **preve_sent_msg_seq** (dictionary storing the previous sequence number of sent messages), **global_time_st** (dictionary storing the global time stamp of received messages), and **global_routers** (dictionary storing the global routers information). The class has methods like **neighbour_add** (to add a new neighbour node to the router), **mesg_set** (to set the last received message), **add_prev_seq** (to add the previous sequence number of sent messages to the dictionary), **chk_prev_seq** (to check if the received message's sequence number is not the same as the previous one), **add_timestamp** (to add the global time stamp of the received message to the dictionary), **chk_timestamp** (to check if the received message's time stamp is not the same as the global time stamp), **update_global_routers** (to update the global routers information with the received message's neighbour information), and **check_neighbour_alive** (to check if the received message's neighbour is still alive and add it to the current router's neighbour list if it is).
 
-- LinkStatePacket class: This class represents the link state packet sent by a router to its neighbours. It has attributes like port, name, neigh (list of neighbours), seq_num (sequence number of the packet), timestamp (time stamp of the packet), and last_send (name of the last router that sent the packet). The class has a method increment_sequence_number (to increment the sequence number of the packet).
+- **LinkStatePacket class**: This class represents the link state packet sent by a router to its neighbours. It has attributes like **port**,**name**, **neigh** (list of neighbours), **seq_num** (sequence number of the packet), **timestamp** (time stamp of the packet), and **last_send** (name of the last router that sent the packet). The class has a method **increment_sequence_number** (to increment the sequence number of the packet).
 
-- Neighbours class: This class represents a neighbour node of a router. It has attributes like name, port, and distance (cost of the link between the two nodes).
+- **Neighbours class**: This class represents a neighbour node of a router. It has attributes like **name, port, and distance** (cost of the link between the two nodes).
 
-- Edge class: This class represents an edge (link) between two nodes in the network. It has attributes like start, end, and weight (cost of the link).
+- Edge class: This class represents an edge (link) between two nodes in the network. It has attributes like **start, end, and weight** (cost of the link).
 
-- Graph class: This class represents the network topology as a graph. It has attributes like global_routers (dictionary of router nodes and their neighbours) and graph (dictionary of edges between the routers). The class has a method parse (to create the graph from the global routers information).
+- **Graph class**: This class represents the network topology as a graph. It has attributes like **global_routers** (dictionary of router nodes and their neighbours) and **graph** (dictionary of edges between the routers). The class has a method parse (to create the graph from the global routers information).
 
-- calculate_paths_activator function: This function is used to periodically trigger the dijkstra_calculate_path function to calculate the least cost path to all nodes in the network. It also randomly changes the cost of one of the links in the network.
+- **calculate_paths_activator function**: This function is used to periodically trigger the dijkstra_calculate_path function to calculate the least cost path to all nodes in the network. It also **randomly** changes the cost of one of the links in the network.
 ```
 # select a this router name from the global_routers dictionary
         router_name = parent_router.name
@@ -71,7 +71,7 @@ The script first imports the necessary libraries such as sys, socket, time, thre
         new_cost = random.randint(1, 10)
         parent_router.global_routers[router_name][neighbour_index].distance = new_cost
 ```
-- dijkstra_calculate_path function: This function calculates the least cost path to all nodes in the network using Dijkstra's algorithm. It uses a calculation_table dictionary to keep track of the least cost and visited status of each router node. It creates a new graph object from the parent router's global routers information and initializes the calculation table with initial values. It then iteratively selects the node with the least cost and updates its neighbours' least cost in the calculation table. Finally, it returns the least cost path to all nodes in the network.
+- **dijkstra_calculate_path function**: This function calculates the least cost path to all nodes in the network using Dijkstra's algorithm. It uses a calculation_table dictionary to keep track of the least cost and visited status of each router node. It creates a new graph object from the parent router's global routers information and initializes the calculation table with initial values. It then iteratively selects the node with the least cost and updates its neighbours' least cost in the calculation table. Finally, it returns the least cost path to all nodes in the network.
 
 ```
 def dijkstra_calculate_path():
@@ -157,21 +157,21 @@ def dijkstra_calculate_path():
         print(f'Least cost path to router {node}:{hops[::-1]} and the cost is {calculation_table[node][weight]:.1f}')
 
 ```
-- The udp_client function: This function creates a UDP client socket and sends messages to its neighbors. It uses the _parent_router argument to get the list of its neighbors, sets the timestamp of the message, serializes it using the pickle module and sends it to each of its neighbors. It then sleeps for update_interval seconds and increments the sequence number of the message.
+- **udp_client function**: This function creates a **UDP** client socket and sends messages to its neighbors. It uses the _parent_router argument to get the list of its neighbors, sets the timestamp of the message, serializes it using the pickle module and sends it to each of its neighbors. It then sleeps for update_interval seconds and increments the sequence number of the message.
 
-- The chk_prev_seq function: This function takes a message and _parent_router as arguments and returns a boolean value indicating whether the sequence number of the message is greater than the previous sequence number for that message's name in the _parent_router. It is used to check if a message is newer than the previous message with the same name received by the router.
+- **chk_prev_seq function**: This function takes a message and _parent_router as arguments and returns a boolean value indicating whether the sequence number of the message is greater than the previous sequence number for that message's name in the _parent_router. It is used to check if a message is newer than the previous message with the same name received by the router.
 
-- The check_previous_sent_timestamp function: This function takes a message and _parent_router as arguments and returns a boolean value indicating whether the timestamp of the message is greater than the previously received timestamp for that message's name in the _parent_router. It is used to check if a message is newer than the previously received message with the same name from a neighbor.
+- **check_previous_sent_timestamp function**: This function takes a message and _parent_router as arguments and returns a boolean value indicating whether the timestamp of the message is greater than the previously received timestamp for that message's name in the _parent_router. It is used to check if a message is newer than the previously received message with the same name from a neighbor.
 
-- The udp_server function: This function creates a UDP server socket, binds to the router's port and waits for incoming messages. It then processes the received message by checking its timestamp, sequence number and previous sent message. It then forwards the message to its neighbors except the previous sender. It also updates the _parent_router with the received message's information.
+- **udp_server function**: This function creates a UDP server socket, binds to the router's port and waits for incoming messages. It then processes the received message by checking its timestamp, sequence number and previous sent message. It then forwards the message to its neighbors except the previous sender. It also updates the _parent_router with the received message's information.
 
-- The check_neigh_alive function: This function checks if any neighbor of the _parent_router has not sent a message for more than 3 seconds, in which case it removes that neighbor from the router's list of neighbors and from the _parent_router's global key-value dict of routers.
+- **check_neigh_alive function**: This function checks if any neighbor of the _parent_router has not sent a message for more than 3 seconds, in which case it removes that neighbor from the router's list of neighbors and from the _parent_router's global key-value dict of routers.
 
-- The not_neigh function: This function takes a router and _parent_router as arguments and returns a boolean value indicating whether the router is not a neighbor of the _parent_router.
+- **not_neigh function**: This function takes a router and _parent_router as arguments and returns a boolean value indicating whether the router is not a neighbor of the _parent_router.
 
-- The check_if_non_neigh_alive function: This function checks if any router which is not a neighbor of the _parent_router has not sent a message for more than 12 seconds, in which case it removes that router from the _parent_router's global key-value dict of routers.
+- **check_if_non_neigh_alive function**: This function checks if any router which is not a neighbor of the _parent_router has not sent a message for more than 12 seconds, in which case it removes that router from the _parent_router's global key-value dict of routers.
 
-- The check_alive function: This function runs in a separate thread and periodically calls the check_neigh_alive and check_if_non_neigh_alive functions to check the liveness of its neighbors and non-neighbors respectively.
+- **check_alive function**: This function runs in a separate thread and periodically calls the check_neigh_alive and check_if_non_neigh_alive functions to check the liveness of its neighbors and non-neighbors respectively.
 
 The main body of the code reads the input file and creates the NodeRouter object representing the parent router and Neighbours objects representing its neighbors. It then creates threads for the udp_client, udp_server, distance_calculation_activator and check_alive functions and starts them.
 ## Contributing
