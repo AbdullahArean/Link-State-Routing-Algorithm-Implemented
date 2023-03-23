@@ -26,7 +26,7 @@ Welcome to the Link State Routing Protocol implementation project using Python. 
 In recent versions of Mac OS X, Python is pre-installed. However, for older versions, the latest version of Python can be downloaded from the official Python website. Similarly, in Linux, Python is usually pre-installed, but if it is not, the distribution's package manager can be used to install Python. For example, on Ubuntu and Debian, the command "sudo apt-get install python3" can be used. In case of Windows, the latest version of Python can be downloaded from the official Python website and installed on the system.
 
 ### Router Creation
-To run router with your desired topology, make a configX.txt file with the following
+To run router with your desired topology, make a configX.txt file with the following, goto src folder (cd src)
 ```
 <router-name> <router-port>
 <number-of-neighbour-router>
@@ -39,18 +39,25 @@ after that run the following command in a separate terminal tab to run that rout
 ```
 python3 LinkStateRouting.py configX.txt
 ```
-Any number of router can be created, for our testing purpose, we created 6 routers, and wrote a script named "testlinux.py" to run all of them in linux and observe the routing algorithm.
+Any number of router can be created.
+### Testing With 6 Routers
+For our testing purpose, created 6 routers, and wrote a script named "testlinux.py" to run all of them in linux and observe the routing algorithm.
 ```
+cd Test
 python3 testlinux.py
 ```
-for windows machine we need to run the following command,
+for windows machine run the following command,
 ```
+cd Test
+python3 testwindows.py
+```
+for mac machine run the following command,
+```
+cd Test
 python3 testwindows.py
 ```
 ## Implementation
-**LinkStateRouting.py** script that contains the implementation of a router simulation. It uses socket programming, threading, and **Dijkstra's algorithm** to simulate a routing network.
-
-The script first imports the necessary libraries such as **sys, socket, time, threading, pickle, defaultdict, inf, datetime, Dict, List, Any, Union, copy, and random**. It then defines some global variables such as **arg_num, file_name, name_router, parent_port, port_child, distance, update_interval, router_update_interval, and server_name**.
+src contains all the classed and functions implemented in different python file. **LinkStateRouting.py** script that contains the implementation of a router simulation. It uses classes and functions from different python files to create Link State Routing Algorithm Simulation. Description about different classes and functions are given below:
 
 - **NodeRouter class**: This class represents a router node in the network. It has attributes like **name**, **port**, **neigh** (list of neighbour nodes), **msg** (last received message), **preve_sent_msg_seq** (dictionary storing the previous sequence number of sent messages), **global_time_st** (dictionary storing the global time stamp of received messages), and **global_routers** (dictionary storing the global routers information). The class has methods like **neighbour_add** (to add a new neighbour node to the router), **mesg_set** (to set the last received message), **add_prev_seq** (to add the previous sequence number of sent messages to the dictionary), **chk_prev_seq** (to check if the received message's sequence number is not the same as the previous one), **add_timestamp** (to add the global time stamp of the received message to the dictionary), **chk_timestamp** (to check if the received message's time stamp is not the same as the global time stamp), **update_global_routers** (to update the global routers information with the received message's neighbour information), and **check_neighbour_alive** (to check if the received message's neighbour is still alive and add it to the current router's neighbour list if it is).
 
