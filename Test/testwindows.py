@@ -20,4 +20,5 @@ configs = ['configA.txt', 'configB.txt', 'configC.txt', 'configD.txt', 'configE.
 for config in configs:
     # Change the working directory of the Command Prompt to the current directory of the Python file
     # Use the /d switch to also change the drive if necessary
+    config = os.path.join(current_dir, config)
     os.system(f"start cmd.exe /d {current_dir} /k python {lsr_path} {config}")

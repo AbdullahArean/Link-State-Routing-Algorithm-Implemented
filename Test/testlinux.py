@@ -19,5 +19,6 @@ configs = ['configA.txt', 'configB.txt', 'configC.txt', 'configD.txt', 'configE.
 
 # Loop through each config file and open a new terminal window for each one
 for i, config in enumerate(configs):
+    config = os.path.join(current_dir,config)
     # Use xterm to open a new terminal window with a specific title and run the python command with the configuration
     os.system(f"xterm -T \"{chr(65+i)}\" -e python3 {lsr_path} {config} &")

@@ -1,8 +1,8 @@
 import socket as s
 import pickle
 import copy
-from src.LinkStatePacket import LinkStatePacket
-from src.PathCalculation import *
+from LinkStatePacket import LinkStatePacket
+from PathCalculation import *
 
 
 def chk_prev_seq(msg: LinkStatePacket, _parent_router: NodeRouter):
