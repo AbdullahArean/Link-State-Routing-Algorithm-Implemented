@@ -1,5 +1,7 @@
 from Edge import Edge
 from collections import defaultdict
+
+
 class Graph:
     def __init__(self, global_routers):
         self.global_routers = global_routers

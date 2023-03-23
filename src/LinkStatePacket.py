@@ -1,5 +1,7 @@
 import datetime as dt
 from NodeRouter import NodeRouter
+
+
 class LinkStatePacket:
     def __init__(self, sender: NodeRouter):
         self.port = sender.port

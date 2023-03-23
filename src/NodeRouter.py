@@ -2,6 +2,8 @@ from collections import defaultdict
 from math import inf
 from Neighbours import Neighbours
 from typing import Dict, List, Any
+
+
 class NodeRouter:
     def __init__(self, name, port, neighbours_list):
         self.name = name
@@ -11,19 +13,26 @@ class NodeRouter:
         self.preve_sent_msg_seq = defaultdict(int)
         self.global_time_st = defaultdict(float)
         self.global_routers = defaultdict(list)
+
     def neighbour_add(self, neighbour):
         self.neigh.append(neighbour)
         self.global_routers[self.name].append(neighbour)
+
     def mesg_set(self, msg):
         self.msg = msg
+
     def add_prev_seq(self, msg):
         self.preve_sent_msg_seq[msg.name] = msg.seq_num
+
     def chk_prev_seq(self, msg):
         return self.preve_sent_msg_seq[msg.name] != msg.seq_num
+
     def add_timestamp(self, msg):
         self.global_time_st[msg.name] = msg.timestamp
+
     def chk_timestamp(self, msg):
         return self.global_time_st[msg.name] != msg.timestamp
+
     def update_global_routers(self, msg):
         if len(self.global_routers[msg.name]) > 0:
             for neighbour in msg.neigh:
@@ -38,6 +47,7 @@ class NodeRouter:
         else:
             for neighbour in msg.neigh:
                 self.global_routers[msg.name].append(neighbour)
+
     def check_neighbour_alive(self, msg):
         for neighbour in msg.neigh:
             if neighbour.name == self.name:

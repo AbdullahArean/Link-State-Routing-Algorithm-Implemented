@@ -1,4 +1,3 @@
-import time
 from math import inf
 from typing import Dict, List, Any, Union
 import random
@@ -7,24 +6,27 @@ from Alive import *
 from NodeRouter import NodeRouter
 from Variables import *
 
-def calculate_paths_activator( parent_router: NodeRouter):
+
+def calculate_paths_activator(parent_router: NodeRouter):
     while True:
         for key, value in parent_router.global_routers.items():
-            if(key==parent_router.name):
+            if (key == parent_router.name):
                 print(f"NodeRouter {key}:")
                 for neighbour in value:
                     print(f"  - Name: {neighbour.name}, Port: {neighbour.port}, Distance: {neighbour.distance}")
         time.sleep(router_update_interval)
         dijkstra_calculate_path(parent_router)
-        
+
         # select a this router name from the global_routers dictionary
         router_name = parent_router.name
         # select a random neighbour of the router
-        neighbour_index = random.randint(0, len(parent_router.global_routers[router_name])-1)
+        neighbour_index = random.randint(0, len(parent_router.global_routers[router_name]) - 1)
         # change the cost of the neighbour's link
         new_cost = random.randint(1, 10)
         parent_router.global_routers[router_name][neighbour_index].distance = new_cost
-def dijkstra_calculate_path(parent_router: NodeRouter ):
+
+
+def dijkstra_calculate_path(parent_router: NodeRouter):
     # Copying the parent router object
     _parent_router = parent_router
 
@@ -64,13 +66,14 @@ def dijkstra_calculate_path(parent_router: NodeRouter ):
     printing_list = []
 
     # While all routers haven't been visited
-    while counter != total_routers-1:
+    while counter != total_routers - 1:
         # For all edges from the current router
         for edge in g.graph[current_router]:
             # For each router in the calculation_table
             for node, weight_status in calculation_table.items():
                 # If the router is the edge's end and hasn't been visited yet and has a higher cost than the current path
-                if node == edge.end and not weight_status[visited_status] and calculation_table[node][weight] > calculation_table[current_router][weight] + float(edge.weight):
+                if node == edge.end and not weight_status[visited_status] and calculation_table[node][weight] > \
+                        calculation_table[current_router][weight] + float(edge.weight):
                     # Update the least cost for the router
                     calculation_table[node][weight] = calculation_table[current_router][weight] + float(edge.weight)
                     # Set the parent for the router to the current router
@@ -105,4 +108,3 @@ def dijkstra_calculate_path(parent_router: NodeRouter ):
             hops = hops + current_parent
             current_parent = calculation_table[current_parent][parent_]
         print(f'Least cost path to router {node}:{hops[::-1]} and the cost is {calculation_table[node][weight]:.1f}')
-
