@@ -14,4 +14,4 @@ for i, config in enumerate(configs):
     config = os.path.join(current_dir, config)
     # Use the command 'gnome-terminal' to open a new terminal window with a specific title and run the python command
     # with the configuration
-    os.system(f"gnome-terminal --title=\"{chr(65 + i)}\" -e \"python3 {lsr_path} {config}\" &")
+    os.system('gnome-terminal --title="{title}" -e "python3 {lsr_path} {config}" &'.format(title=chr(65 + i), lsr_path=lsr_path, config=config))
